@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI CMS Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>🧠 ПРОЕКТ НА БАБКИ — Панель управления</h1>
+    <div class="card">
+        <h2>Сайты</h2>
+        <table>
+            <thead>
+                <tr><th>Название</th><th>AdSense</th><th>Партнёрки</th><th>Продажи</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="siteTable"></tbody>
+        </table>
+    </div>
+    <div class="card">
+        <h2>Создать новый сайт</h2>
+        <form onsubmit="createSite(event)">
+            <input type="text" id="niche" placeholder="Введите нишу..." required>
+            <button type="submit">Создать</button>
+        </form>
+    </div>
+    <script>
+        async function loadDashboard() {
+            const res = await fetch('/api/sites');
+            const data = await res.json();
+            const tbody = document.getElementById('siteTable');
+            tbody.innerHTML = '';
+            for (const [site, stats] of Object.entries(data)) {
+                tbody.innerHTML += `<tr>
+                    <td>${site}</td>
+                    <td>$${stats.adsense}</td>
+                    <td>$${stats.affiliate}</td>
+                    <td>$${stats.sales}</td>
+                    <td>
+                        <a href="/edit/${site}/page-1.html" target="_blank">Редактировать</a>
+                    </td>
+                </tr>`;
+            }
+        }
+        async function createSite(e) {
+            e.preventDefault();
+            const niche = document.getElementById('niche').value;
+            await fetch('/api/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ niche })
+            });
+            alert('Сайт создан!');
+            location.reload();
+        }
+        loadDashboard();
+    </script>
+</body>
+</html>

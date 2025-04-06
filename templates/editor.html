@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактирование: {{ site_name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Редактор страницы: <span style="color:#f39c12;">{{ site_name }}</span></h1>
+        <form method="post">
+            <textarea name="content" class="editor-box">{{ content }}</textarea><br>
+            <button type="submit" class="btn-save">💾 Сохранить изменения</button>
+        </form>
+    </div>
+</body>
+</html>
